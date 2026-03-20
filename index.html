@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProfPath — Найди своё призвание</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Шапка -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="header-spacer"></div>
+                <nav class="nav">
+                    <a href="#home" class="nav-link active" data-section="home">Главная</a>
+                    <a href="#tests" class="nav-link" data-section="tests">Тесты</a>
+                </nav>
+                <div class="header-right">
+                    <button class="theme-toggle" id="themeToggle" aria-label="Переключить тему">
+                        <span class="theme-icon">🌙</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Основной контент -->
+    <main>
+        <!-- Раздел: Главная -->
+        <section id="home" class="section active">
+            <!-- Hero блок -->
+            <div class="hero">
+                <div class="container">
+                    <div class="hero-content">
+                        <h1 class="hero-title">Найди своё призвание</h1>
+                        <p class="hero-subtitle">Пройди научно обоснованные тесты и узнай, какие профессии тебе подходят. Основано на методиках Климова, Холланда и других исследователей.</p>
+                        <button class="btn btn-primary" id="heroBtn">Пройти тесты</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Блок преимуществ -->
+            <div class="benefits">
+                <div class="container">
+                    <h2 class="section-title">Почему это работает</h2>
+                    <div class="benefits-grid">
+                        <div class="benefit-card">
+                            <div class="benefit-icon">🧠</div>
+                            <h3 class="benefit-title">Научная основа</h3>
+                            <p class="benefit-text">Методики, разработанные ведущими психологами и проверенные десятилетиями.</p>
+                        </div>
+                        <div class="benefit-card">
+                            <div class="benefit-icon">🎯</div>
+                            <h3 class="benefit-title">Точный результат</h3>
+                            <p class="benefit-text">Алгоритмы подсчета баллов дают персонализированную рекомендацию именно для тебя.</p>
+                        </div>
+                        <div class="benefit-card">
+                            <div class="benefit-icon">✓</div>
+                            <h3 class="benefit-title">Быстро и просто</h3>
+                            <p class="benefit-text">Каждый тест занимает не больше 5-7 минут.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Блок с описанием тестов -->
+            <div class="tests-preview">
+                <div class="container">
+                    <h2 class="section-title">Какие тесты вас ждут</h2>
+                    <p class="section-description">Мы собрали два классических теста, которые помогут определить ваши склонности и тип личности.</p>
+                    
+                    <div class="tests-preview-grid">
+                        <div class="test-preview-card">
+                            <h3 class="test-preview-title">Тест №1. "Тип профессии по Климову"</h3>
+                            <p class="test-preview-description">Определяет вашу предрасположенность к сферам: Человек-Природа, Человек-Техника, Человек-Человек, Человек-Знаковая система, Человек-Художественный образ.</p>
+                            <p class="test-preview-time">⏱ Время прохождения: ~5 минут</p>
+                            <button class="btn btn-secondary test-select-btn" data-test="klimov">Выбрать</button>
+                        </div>
+                        <div class="test-preview-card">
+                            <h3 class="test-preview-title">Тест №2. "Тест Холланда (упрощенный)"</h3>
+                            <p class="test-preview-description">Определяет ваш тип личности: реалистический, исследовательский, артистический, социальный, предпринимательский, систематический.</p>
+                            <p class="test-preview-time">⏱ Время прохождения: ~7 минут</p>
+                            <button class="btn btn-secondary test-select-btn" data-test="holland">Выбрать</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <div class="container">
+                    <p class="footer-text">© 2026 | Школьный проект по профориентации | Все права защищены</p>
+                </div>
+            </footer>
+        </section>
+
+        <!-- Раздел: Тесты -->
+        <section id="tests" class="section">
+            <div class="container">
+                <!-- Список тестов -->
+                <div class="tests-list" id="testsList">
+                    <h2 class="section-title">Выберите тест</h2>
+                    
+                    <div class="test-cards">
+                        <div class="test-card" data-test="klimov">
+                            <h3 class="test-card-title">Методика Климова (30 вопросов)</h3>
+                            <p class="test-card-description">Классический тест, который поможет понять, с каким типом объектов (люди, техника, природа, знаки, искусство) вам комфортнее всего работать.</p>
+                            <button class="btn btn-primary start-test" data-test="klimov">Начать тест</button>
+                        </div>
+                        
+                        <div class="test-card" data-test="holland">
+                            <h3 class="test-card-title">Тест Холланда (15 вопросов)</h3>
+                            <p class="test-card-description">Определите свой профессиональный тип личности и узнайте, в какой среде вы будете наиболее эффективны и счастливы.</p>
+                            <button class="btn btn-primary start-test" data-test="holland">Начать тест</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Интерфейс прохождения теста -->
+                <div class="test-interface" id="testInterface" style="display: none;">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <p class="progress-text" id="progressText">Вопрос 1 из 30</p>
+                    
+                    <h2 class="question-title" id="questionTitle">Вопрос появится здесь</h2>
+                    
+                    <div class="answers" id="answersContainer">
+                        <!-- Варианты ответов будут добавлены через JS -->
+                    </div>
+                    
+                    <button class="btn btn-primary btn-next" id="nextBtn" disabled>Далее</button>
+                </div>
+
+                <!-- Экран результатов -->
+                <div class="test-results" id="testResults" style="display: none;">
+                    <h2 class="results-title">Ваш результат</h2>
+                    <div class="results-type" id="resultsType">ТИП ЛИЧНОСТИ</div>
+                    <p class="results-description" id="resultsDescription">Описание типа появится здесь</p>
+                    
+                    <div class="results-professions">
+                        <h3>Рекомендуемые профессии:</h3>
+                        <ul id="professionsList">
+                            <!-- Список профессий будет добавлен через JS -->
+                        </ul>
+                    </div>
+                    
+                    <div class="results-actions">
+                        <button class="btn btn-secondary" id="retakeBtn">Пройти заново</button>
+                        <button class="btn btn-primary" id="backToTestsBtn">К списку тестов</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
