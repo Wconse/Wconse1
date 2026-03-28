@@ -34,6 +34,10 @@ navLinks.forEach(link => {
     link.addEventListener('click', (e) => {
         e.preventDefault();
         const sectionId = link.dataset.section;
+        
+        // Update URL hash for GitHub Pages
+        window.location.hash = sectionId;
+        
         navigateToSection(sectionId);
         
         // Reset tests section to list view
@@ -42,6 +46,40 @@ navLinks.forEach(link => {
         }
     });
 });
+
+// Handle URL hash on page load (for GitHub Pages)
+function handleInitialHash() {
+    const hash = window.location.hash;
+    if (hash) {
+        const sectionId = hash.substring(1); // Remove '#'
+        const targetSection = document.getElementById(sectionId);
+        if (targetSection) {
+            navigateToSection(sectionId);
+            // Reset tests section to list view if needed
+            if (sectionId === 'tests') {
+                showTestsList();
+            }
+        }
+    }
+}
+
+// Handle hash changes (browser back/forward buttons)
+window.addEventListener('hashchange', () => {
+    const hash = window.location.hash;
+    if (hash) {
+        const sectionId = hash.substring(1);
+        const targetSection = document.getElementById(sectionId);
+        if (targetSection) {
+            navigateToSection(sectionId);
+            if (sectionId === 'tests') {
+                showTestsList();
+            }
+        }
+    }
+});
+
+// Call on page load
+handleInitialHash();
 
 // Hero button - navigate to tests
 document.getElementById('heroBtn').addEventListener('click', () => {
