@@ -363,7 +363,10 @@ function showTestResults() {
 }
 
 function startTest(testId) {
+    console.log('startTest called with:', testId);
     currentTest = testsData[testId];
+    console.log('currentTest:', currentTest);
+    console.log('totalQuestions:', currentTest?.totalQuestions);
     currentQuestionIndex = 0;
     answers = [];
     showTestInterface();
@@ -371,6 +374,7 @@ function startTest(testId) {
 }
 
 function displayQuestion() {
+    console.log('displayQuestion, index:', currentQuestionIndex, 'total:', currentTest.totalQuestions);
     const question = currentTest.questions[currentQuestionIndex];
     const progress = ((currentQuestionIndex + 1) / currentTest.totalQuestions) * 100;
 
@@ -424,7 +428,9 @@ function displayQuestion() {
 }
 
 document.getElementById('nextBtn').addEventListener('click', () => {
+    console.log('nextBtn clicked');
     const selectedOption = document.querySelector('.answer-option.selected');
+    console.log('selectedOption:', selectedOption);
     if (selectedOption) {
         const answer = {
             questionIndex: currentQuestionIndex,
@@ -437,10 +443,12 @@ document.getElementById('nextBtn').addEventListener('click', () => {
             answer.category = currentTest.questions[currentQuestionIndex].category;
         }
         answers.push(answer);
+        console.log('Answers count:', answers.length, 'Total:', currentTest.totalQuestions);
 
         currentQuestionIndex++;
 
         if (currentQuestionIndex < currentTest.totalQuestions) {
+            console.log('Showing next question:', currentQuestionIndex + 1);
             displayQuestion();
         } else {
             calculateAndShowResults();
