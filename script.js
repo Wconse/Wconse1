@@ -333,12 +333,12 @@ const values = {
         { text: 'Безопасность и отсутствие постоянного стресса', category: 'working_conditions' }
     ],
     results: {
-        achievement: { title: '🎯 Достижения', description: 'Вам важны сложные задачи, рост мастерства, ощущение «я умею и делаю круто». Вы мотивированы, когда видите реальный результат и чувствуете гордость за свою работу.' },
-        independence: { title: '🦅 Независимость', description: 'Вам важны автономия, свобода способа работы, доверие, гибкость. Вы предпочитаете самостоятельно выбирать подход к задачам и не любите мелкий контроль.' },
-        recognition: { title: '⭐ Признание', description: 'Вам важны статус, заметность вклада, продвижение, роль «с весом». Вы мотивированы, когда ваши достижения видны и отмечены.' },
-        relationships: { title: '🤝 Отношения', description: 'Вам важны команда, атмосфера, коммуникации, польза людям. Вы цените тёплые отношения на работе и стремитесь быть полезным.' },
-        support: { title: '🛡️ Поддержка', description: 'Вам важны адекватный менеджмент, справедливость, обучение, забота о людях. Вы хотите работать в среде, где можно попросить помощь и получить её.' },
-        working_conditions: { title: '🏠 Условия труда', description: 'Вам важны стабильность, деньги/компенсации, безопасность, баланс и комфорт. Вы цените предсказуемость и разумную нагрузку.' }
+        achievement: { title: 'Достижения', description: 'Вам важны сложные задачи, рост мастерства, ощущение «я умею и делаю круто». Вы мотивированы, когда видите реальный результат и чувствуете гордость за свою работу.' },
+        independence: { title: 'Независимость', description: 'Вам важны автономия, свобода способа работы, доверие, гибкость. Вы предпочитаете самостоятельно выбирать подход к задачам и не любите мелкий контроль.' },
+        recognition: { title: 'Признание', description: 'Вам важны статус, заметность вклада, продвижение, роль «с весом». Вы мотивированы, когда ваши достижения видны и отмечены.' },
+        relationships: { title: 'Отношения', description: 'Вам важны команда, атмосфера, коммуникации, польза людям. Вы цените тёплые отношения на работе и стремитесь быть полезным.' },
+        support: { title: 'Поддержка', description: 'Вам важны адекватный менеджмент, справедливость, обучение, забота о людях. Вы хотите работать в среде, где можно попросить помощь и получить её.' },
+        working_conditions: { title: 'Условия труда', description: 'Вам важны стабильность, деньги/компенсации, безопасность, баланс и комфорт. Вы цените предсказуемость и разумную нагрузку.' }
     }
 };
 
@@ -363,10 +363,23 @@ function showTestResults() {
 }
 
 function startTest(testId) {
-    console.log('startTest called with:', testId);
+    // Clean up ALL previous results (including dynamically added ones)
+    document.getElementById('customResults')?.remove();
+    document.querySelectorAll('.custom-bars').forEach(el => el.remove());
+    // Remove any dynamically added .results-professions (from Holland/Values)
+    document.querySelectorAll('.results-professions').forEach(el => {
+        if (!el.querySelector('ul#professionsList')) {
+            el.remove();
+        }
+    });
+    // Restore original results container
+    const resultsProfessions = document.querySelector('.results-professions');
+    if (resultsProfessions) { resultsProfessions.style.display = ''; }
+    document.getElementById('resultsType').style.display = '';
+    document.getElementById('resultsDescription').textContent = 'Описание типа появится здесь';
+    document.getElementById('professionsList').innerHTML = '';
+
     currentTest = testsData[testId];
-    console.log('currentTest:', currentTest);
-    console.log('totalQuestions:', currentTest?.totalQuestions);
     currentQuestionIndex = 0;
     answers = [];
     showTestInterface();
@@ -374,7 +387,6 @@ function startTest(testId) {
 }
 
 function displayQuestion() {
-    console.log('displayQuestion, index:', currentQuestionIndex, 'total:', currentTest.totalQuestions);
     const question = currentTest.questions[currentQuestionIndex];
     const progress = ((currentQuestionIndex + 1) / currentTest.totalQuestions) * 100;
 
@@ -428,9 +440,7 @@ function displayQuestion() {
 }
 
 document.getElementById('nextBtn').addEventListener('click', () => {
-    console.log('nextBtn clicked');
     const selectedOption = document.querySelector('.answer-option.selected');
-    console.log('selectedOption:', selectedOption);
     if (selectedOption) {
         const answer = {
             questionIndex: currentQuestionIndex,
@@ -443,12 +453,10 @@ document.getElementById('nextBtn').addEventListener('click', () => {
             answer.category = currentTest.questions[currentQuestionIndex].category;
         }
         answers.push(answer);
-        console.log('Answers count:', answers.length, 'Total:', currentTest.totalQuestions);
 
         currentQuestionIndex++;
 
         if (currentQuestionIndex < currentTest.totalQuestions) {
-            console.log('Showing next question:', currentQuestionIndex + 1);
             displayQuestion();
         } else {
             calculateAndShowResults();
@@ -459,10 +467,15 @@ document.getElementById('nextBtn').addEventListener('click', () => {
 function calculateAndShowResults() {
     const scores = {};
 
-    // Remove any previous custom results
+    // Remove ALL previous dynamic results
     document.getElementById('customResults')?.remove();
-    // Remove any previous Klimov bars added after description
     document.querySelectorAll('.custom-bars').forEach(el => el.remove());
+    // Remove dynamically added .results-professions (from previous Holland/Values)
+    document.querySelectorAll('.results-professions').forEach(el => {
+        if (!el.querySelector('ul#professionsList')) {
+            el.remove();
+        }
+    });
 
     if (currentTest.isLikert) {
         // For Likert: sum by category
@@ -573,7 +586,7 @@ function calculateAndShowResults() {
         document.getElementById('resultsDescription').textContent = desc;
 
         // Show all scores
-        let barsHTML = '<div class="riasec-bars">';
+        let barsHTML = '<div class="custom-bars riasec-bars">';
         const maxPossibleKlimov = 8;
         sorted.forEach(([type, score]) => {
             const pct = Math.round((score / maxPossibleKlimov) * 100);
