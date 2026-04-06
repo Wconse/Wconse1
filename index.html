@@ -245,6 +245,18 @@
             </div>
         </div>
 
+        <!-- Лайтбокс для увеличенных фото -->
+        <div class="lightbox" id="lightbox" style="display: none;">
+            <div class="lightbox-overlay" id="lightboxOverlay"></div>
+            <button class="lightbox-close" id="lightboxClose" aria-label="Закрыть">&times;</button>
+            <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Предыдущее фото">&#10094;</button>
+            <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Следующее фото">&#10095;</button>
+            <div class="lightbox-content">
+                <img src="" alt="" class="lightbox-image" id="lightboxImage">
+            </div>
+            <p class="lightbox-counter" id="lightboxCounter"></p>
+        </div>
+
         <!-- Раздел: Тесты -->
         <section id="tests" class="section">
             <div class="container">

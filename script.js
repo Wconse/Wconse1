@@ -1,6 +1,66 @@
 // ===== Wait for DOM to be ready =====
 document.addEventListener('DOMContentLoaded', () => {
 
+// ===== Lightbox =====
+let lightboxImages = [];
+let lightboxIndex = 0;
+
+function openLightbox(src, index, galleryArray) {
+    lightboxImages = galleryArray;
+    lightboxIndex = index;
+    const lightbox = document.getElementById('lightbox');
+    const img = document.getElementById('lightboxImage');
+    const counter = document.getElementById('lightboxCounter');
+    
+    img.src = lightboxImages[lightboxIndex];
+    counter.textContent = `${lightboxIndex + 1} / ${lightboxImages.length}`;
+    
+    lightbox.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    
+    // Show/hide navigation buttons
+    document.getElementById('lightboxPrev').style.display = lightboxImages.length > 1 ? 'flex' : 'none';
+    document.getElementById('lightboxNext').style.display = lightboxImages.length > 1 ? 'flex' : 'none';
+}
+
+function closeLightbox() {
+    document.getElementById('lightbox').style.display = 'none';
+    document.body.style.overflow = '';
+    // Re-enable scroll on institution modal underneath
+    const institutionModal = document.getElementById('institutionModal');
+    if (institutionModal.style.display !== 'none') {
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function lightboxPrev() {
+    if (lightboxImages.length <= 1) return;
+    lightboxIndex = (lightboxIndex - 1 + lightboxImages.length) % lightboxImages.length;
+    document.getElementById('lightboxImage').src = lightboxImages[lightboxIndex];
+    document.getElementById('lightboxCounter').textContent = `${lightboxIndex + 1} / ${lightboxImages.length}`;
+}
+
+function lightboxNext() {
+    if (lightboxImages.length <= 1) return;
+    lightboxIndex = (lightboxIndex + 1) % lightboxImages.length;
+    document.getElementById('lightboxImage').src = lightboxImages[lightboxIndex];
+    document.getElementById('lightboxCounter').textContent = `${lightboxIndex + 1} / ${lightboxImages.length}`;
+}
+
+function setupLightboxListeners() {
+    document.getElementById('lightboxClose')?.addEventListener('click', closeLightbox);
+    document.getElementById('lightboxPrev')?.addEventListener('click', lightboxPrev);
+    document.getElementById('lightboxNext')?.addEventListener('click', lightboxNext);
+    document.getElementById('lightboxOverlay')?.addEventListener('click', closeLightbox);
+    document.addEventListener('keydown', (e) => {
+        const lightbox = document.getElementById('lightbox');
+        if (lightbox.style.display === 'none') return;
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowLeft') lightboxPrev();
+        if (e.key === 'ArrowRight') lightboxNext();
+    });
+}
+
 // ===== SPA Navigation =====
 const sections = document.querySelectorAll('.section');
 const navLinks = document.querySelectorAll('.nav-link');
@@ -700,9 +760,9 @@ const institutionsDataEmbedded = {
       "fullDescription": "Миасский филиал Челябинского государственного университета предлагает программы бакалавриата, магистратуры и СПО.",
       "address": "г. Миасс, ул. Керченская, 1",
       "phone": "+7 (3513) 55-00-01",
-      "website": "https://csu-miass.ru/",
+      "website": "https://mf.csu.ru/",
       "specialties": ["Филология", "История", "Математика и информатика", "Биология", "Экономика"],
-      "gallery": ["images/institutions/miass_chelsu-1.jpg", "images/institutions/miass_chelsu-2.jpg", "images/institutions/miass_chelsu-3.jpg"]
+      "gallery": ["images/institutions/miass_chelsu-1.jpg", "images/institutions/miass_chelsu-2.jpg"]
     },
     {
       "id": "mgrk",
@@ -715,7 +775,7 @@ const institutionsDataEmbedded = {
       "phone": "+7 (3513) 55-10-00",
       "website": "https://miassgrk.ru/",
       "specialties": ["Геологоразведка", "Бурение скважин", "Маркшейдерское дело", "Прикладная геология"],
-      "gallery": ["images/institutions/mgrk-1.jpg", "images/institutions/mgrk-2.jpg", "images/institutions/mgrk-3.jpg"]
+      "gallery": ["images/institutions/mgrk-1.jpg"]
     },
     {
       "id": "mimk",
@@ -728,7 +788,7 @@ const institutionsDataEmbedded = {
       "phone": "+7 (3513) 55-20-00",
       "website": "https://miassmk.ru/",
       "specialties": ["Технология машиностроения", "Автомобилестроение", "ТО и ремонт", "Сварочное производство"],
-      "gallery": ["images/institutions/mimk-1.jpg", "images/institutions/mimk-2.jpg", "images/institutions/mimk-3.jpg"]
+      "gallery": ["images/institutions/mimk-1.jpg"]
     },
     {
       "id": "mpk",
@@ -741,7 +801,7 @@ const institutionsDataEmbedded = {
       "phone": "+7 (3513) 55-30-00",
       "website": "https://miasspk.ru/",
       "specialties": ["Преподавание в начальных классах", "Дошкольное образование", "Коррекционная педагогика"],
-      "gallery": ["images/institutions/mpk-1.jpg", "images/institutions/mpk-2.jpg", "images/institutions/mpk-3.jpg"]
+      "gallery": ["images/institutions/mpk-1.jpg", "images/institutions/mpk-2.jpg"]
     },
     {
       "id": "mmk",
@@ -754,7 +814,7 @@ const institutionsDataEmbedded = {
       "phone": "+7 (3513) 55-40-00",
       "website": "https://miassmed.tmweb.ru/",
       "specialties": ["Сестринское дело", "Лечебное дело", "Фармация", "Лабораторная диагностика"],
-      "gallery": ["images/institutions/mmk-1.jpg", "images/institutions/mmk-2.jpg", "images/institutions/mmk-3.jpg"]
+      "gallery": ["images/institutions/mmk-1.jpg"]
     },
     {
       "id": "mgkik",
@@ -767,20 +827,7 @@ const institutionsDataEmbedded = {
       "phone": "+7 (3513) 55-50-00",
       "website": "https://колледжискусствмиасс.рф/",
       "specialties": ["Музыкальное искусство", "Народное художественное творчество", "Сольное и хоровое пение"],
-      "gallery": ["images/institutions/mgkik-1.jpg", "images/institutions/mgkik-2.jpg", "images/institutions/mgkik-3.jpg"]
-    },
-    {
-      "id": "mst",
-      "name": "Миасский строительный техникум",
-      "type": "technikum", "typeName": "Техникум",
-      "logo": "images/institutions/mst-logo.jpg",
-      "shortDescription": "Подготовка специалистов для строительной отрасли",
-      "fullDescription": "Техникум готовит специалистов для строительной отрасли.",
-      "address": "г. Миасс, ул. Лихачёва, 15",
-      "phone": "+7 (3513) 55-60-00",
-      "website": "https://mst49.ru/",
-      "specialties": ["Строительство и эксплуатация зданий", "Архитектура", "Мастер отделочных работ"],
-      "gallery": ["images/institutions/mst-1.jpg", "images/institutions/mst-2.jpg", "images/institutions/mst-3.jpg"]
+      "gallery": ["images/institutions/mgkik-1.jpg", "images/institutions/mgkik-2.jpg"]
     },
     {
       "id": "chuk_miass",
@@ -806,7 +853,7 @@ const institutionsDataEmbedded = {
       "phone": "+7 (3513) 55-80-00",
       "website": "https://topitcollege.ru/miass",
       "specialties": ["Информационные системы", "Веб-разработка", "Дизайн интерфейсов"],
-      "gallery": ["images/institutions/mmcdt-1.jpg", "images/institutions/mmcdt-2.jpg", "images/institutions/mmcdt-3.jpg"]
+      "gallery": ["images/institutions/mmcdt-1.jpg", "images/institutions/mmcdt-2.jpg"]
     }
   ]
 };
@@ -870,10 +917,10 @@ function openModal(id) {
     inst.specialties.forEach(s => { const li = document.createElement('li'); li.textContent = s; sl.appendChild(li); });
     const g = document.getElementById('modalGallery');
     g.innerHTML = '';
-    inst.gallery.forEach(src => {
+    inst.gallery.forEach((src, idx) => {
         const img = document.createElement('img');
         img.src = src; img.alt = inst.name; img.className = 'modal-gallery-img';
-        img.addEventListener('click', () => window.open(src, '_blank'));
+        img.addEventListener('click', () => openLightbox(src, idx, inst.gallery));
         g.appendChild(img);
     });
     document.getElementById('institutionModal').style.display = 'flex';
@@ -903,5 +950,6 @@ function setupInstitutionsNavigation() {
 loadInstitutions();
 setupModalListeners();
 setupInstitutionsNavigation();
+setupLightboxListeners();
 
 }); // End of DOMContentLoaded
